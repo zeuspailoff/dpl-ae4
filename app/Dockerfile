@@ -1,12 +1,5 @@
-# Imagen del servidor de aplicaciones Django (curso DPL, UT4) — versión de referencia
-#
-# Este Dockerfile está pensado para construirse desde la RAÍZ del proyecto
-# (contexto raíz: COPY app/...), una variante útil si tu entrega sitúa el
-# Dockerfile en la raíz. El compose.yml del material construye la imagen
-# desde ./app usando app/Dockerfile (misma receta, contexto app/); ambos son
-# equivalentes.
-#
-# Uso: docker compose up -d    (o manualmente: docker build -t dpl-app:local .)
+# Imagen del servidor de aplicaciones Django (curso DPL, UT4)
+# Uso: docker compose up -d   (el servicio "django" la construye desde ./app)
 #
 # Imagen base: python:3.12-slim (versión orientativa). Alternativa coherente
 # con el resto del curso: FROM ubuntu:24.04 + apt-get install -y python3
@@ -17,11 +10,11 @@ FROM python:3.12-slim
 WORKDIR /app
 
 # 1) Dependencias primero: solo se reinstalan si cambia requirements.txt
-COPY app/requirements.txt .
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # 2) Código del proyecto Django (manage.py, config/, api/)
-COPY app/ .
+COPY . .
 
 # 3) Usuario sin privilegios (buena práctica) y carpeta de datos propia
 RUN useradd --create-home --uid 1000 appuser \
